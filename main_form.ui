@@ -86,22 +86,6 @@ color: rgb(255, 255, 255);</string>
      <string>Describe your meal and I will suggest wines to pair with it.</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>160</y>
-      <width>381</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>red meat (e.g., beef; lamb; venison)</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
@@ -117,54 +101,6 @@ color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string>Which, if any, of these meats willl be part of your meal?</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>210</y>
-      <width>381</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>cured meat (e.g., salami; prosciutto; bacon)</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_3">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>260</y>
-      <width>381</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>pork (e.g., roast; tenderloin; pork chop)</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_4">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>310</y>
-      <width>381</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>poultry (e.g., chicken; duck; turkey)</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_5">
@@ -186,69 +122,32 @@ font: 10pt &quot;Segoe UI&quot;;
      <string>Next</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_6">
+   <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>360</y>
-      <width>381</width>
-      <height>41</height>
+      <x>150</x>
+      <y>180</y>
+      <width>471</width>
+      <height>321</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true"/>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
     </property>
-    <property name="text">
-     <string>mollusk (e.g., oyster; mussel; clam)</string>
+    <property name="sizeAdjustPolicy">
+     <enum>QAbstractScrollArea::AdjustToContents</enum>
     </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_7">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>410</y>
-      <width>381</width>
-      <height>41</height>
-     </rect>
+    <property name="columnCount">
+     <number>3</number>
     </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>fish (e.g., tuna; trout; cod; bass)</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_8">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>460</y>
-      <width>381</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>shellfish (e.g., shrimp; crab; lobster)</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_9">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>510</y>
-      <width>381</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>none of the above/skip this category</string>
-    </property>
+    <attribute name="horizontalHeaderVisible">
+     <bool>true</bool>
+    </attribute>
+    <column/>
+    <column/>
+    <column/>
    </widget>
   </widget>
  </widget>

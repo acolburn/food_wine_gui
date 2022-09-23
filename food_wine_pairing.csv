@@ -1,0 +1,36 @@
+category,name,examples,bold red,medium red,light red,rose,rich white,light white,sparkling,sweet wine,dessert
+meat,red meat,beef; lamb; venison,2,1,0,0,0,0,0,0,0
+meat,cured meat,salami; prosciutto; bacon,1,1,2,1,0,0,1,2,1
+meat,pork,roast; tenderloin; pork chop,1,2,0,1,0,0,1,0,0
+meat,poultry,chicken; duck; turkey,0,1,2,1,2,1,1,0,0
+meat,mollusk,oyster; mussel; clam,0,0,0,0,0,1,2,0,0
+meat,fish,tuna; trout; cod; bass,0,0,0,0,1,2,1,0,0
+meat,shellfish,shrimp; crab; lobster,0,0,0,1,2,1,0,1,0
+preparation,grilled,,2,1,1,0,0,0,1,1,0
+preparation,sauteed or fried,,0,0,2,1,1,1,1,0,0
+preparation,smoked, ,1,2,1,1,0,0,1,0,1
+preparation,roasted, ,2,1,1,1,0,0,0,1,0
+preparation,poached or steamed, ,0,0,0,0,1,2,1,1,0
+dairy,soft cheese and cream,brie; marscapone; crème fraiche,0,1,2,1,2,1,1,1,1
+dairy,pungent cheese,blue; gorgonzola; stilton; roquefort,1,2,0,1,0,1,1,1,2
+dairy,hard cheese,cheddar; pecorino; manchego; asiago; parmesan,2,1,0,1,1,0,1,0,0
+vegetable,alliums,onion; shallot; garlic; scallion,1,2,1,1,1,1,1,1,0
+vegetable,green vegetables,green beans; kale; lettuce,0,0,0,0,0,2,1,0,0
+vegetable,root vegetables,turnip; squash; pumpkin; carrot,0,0,0,1,0,0,0,1,0
+vegetable,nightshades,tomato; eggplant; bell pepper,1,2,0,1,0,0,0,1,0
+vegetable,funghi,mushrooms; crimini; shitake,1,2,2,0,2,0,0,0,0
+vegetable,nuts and seeds,peanut; almond; pecan; sesame,0,0,1,1,1,1,1,2,0
+vegetable,beans and peas,lentil; navy; pinto; chickpea,0,1,0,1,0,2,1,0,0
+seasoning,black pepper,,2,1,0,0,0,0,0,0,0
+seasoning,red pepper,ancho; chili; aleppo; chipotle,1,2,0,1,0,1,1,1,0
+seasoning,hot and spicy,hot sauce; habanero; sichuan,0,0,0,0,0,1,1,2,0
+seasoning,herbs,thyme; oregano; basil; tarragon,0,1,1,1,1,2,0,0,0
+seasoning,baking spices,cinnamon; clove; allspice; mace,0,1,0,1,0,0,0,1,2
+seasoning,exotic aromatic spices,anise; turmeric; saffron; fennel; ginger,0,2,1,1,0,0,1,2,0
+starch,white starch,flour; white rice; pasta; bread; tortillas,1,1,1,1,1,1,1,1,1
+starch,whole wheat grains,quinoa; farro; brown rice,0,0,1,1,1,0,0,2,0
+starch,sweet starchy vegetables,sweet potato; yucca; taro,0,0,0,1,0,0,0,2,0
+starch,potato,,1,1,1,1,1,1,1,1,0
+sweets,fruits and berries,strawberry; orange; apple; peach,0,0,0,0,0,0,1,2,1
+sweets,vanilla and caramel,ice cream; crème brulee,0,0,0,0,0,0,0,1,1
+sweets,chocolate and coffee,,0,0,0,0,0,0,0,0,2
