@@ -103,7 +103,7 @@ color: rgb(255, 255, 255);</string>
      <string>Which, if any, of these meats willl be part of your meal?</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_5">
+   <widget class="QPushButton" name="btnNext">
     <property name="geometry">
      <rect>
       <x>670</x>
@@ -145,9 +145,21 @@ font: 10pt &quot;Segoe UI&quot;;
     <attribute name="horizontalHeaderVisible">
      <bool>true</bool>
     </attribute>
-    <column/>
-    <column/>
-    <column/>
+    <column>
+     <property name="text">
+      <string>-</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Item</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Examples</string>
+     </property>
+    </column>
    </widget>
   </widget>
  </widget>
