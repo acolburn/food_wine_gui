@@ -8,7 +8,7 @@ import wine_type_list
 
 class MainForm(QDialog):
     # initialize empty DataFrame
-    selected_data = pd.DataFrame()
+    # selected_data = pd.DataFrame()
     # making data frame from csv file
     data = pd.read_csv("food_wine_pairing.csv", encoding='unicode_escape')
     # these are the broad categories making up each table in the UI
@@ -20,9 +20,9 @@ class MainForm(QDialog):
 
     def __init__(self):
         # initialize empty DataFrame
-        self.selected_data = pd.DataFrame()
+        # self.selected_data = pd.DataFrame()
         # making data frame from csv file
-        self.data = pd.read_csv("food_wine_pairing.csv", encoding='unicode_escape')
+        # self.data = pd.read_csv("food_wine_pairing.csv", encoding='unicode_escape')
 
         super(MainForm, self).__init__()
         loadUi("main_form.ui", self)
@@ -81,7 +81,36 @@ class MainForm(QDialog):
             self.fill_table(self.category[self.category_index])
         # if the last table has already been displayed
         else:
-            print(self.selections)
+            self.process_selections()
+
+    def process_selections(self):
+        _selected_items_df = self.data.loc[self.data['name'].isin(self.selections)]
+        # select cols that contain value 1
+        cols_with_1 = _selected_items_df.columns[_selected_items_df.eq(1).any()]
+        # select cols that contain value 2
+        cols_with_2 = _selected_items_df.columns[_selected_items_df.eq(2).any()]
+        # combine cols_with_1 and cols_with_2 for everything with a 1 or 2
+        # these are columns for wines that pair with everything
+        # (note: the list(set()) code converts the data to a list, and also assures there are no duplicate items
+        out = list(set(cols_with_2.append(cols_with_1)))
+        # .sum() adds the values in each column
+        # .sort_values(ascending=False) sorts the values (duh) and displays from highest to lowest
+        display = _selected_items_df.sum(numeric_only=True).sort_values(ascending=False)
+
+        # display.index is a list of all the series' indexes, i.e., in this case, names of the wine categories
+        top_pairing = display.index[0]  # so this is the first wine name on the list, the top pair
+        print("The best matching wine category for this meal is " + top_pairing.upper())
+        s = ''
+        the_list = wine_type_list.wine_types[top_pairing]
+        for item in the_list:
+            if the_list.index(item) < len(the_list) - 1:
+                s += item + ", "
+            else:
+                s += "and " + item
+        print("Examples include " + s)
+        # without .to_string() the info is displayed with an added Type:int64 attribute at the end
+        # see https://stackoverflow.com/questions/53025207/how-do-i-remove-name-and-dtype-from-pandas-output
+        print(f"Here is the complete pairing list (higher numbers are better matches.\n{display.to_string()}\n\n")
 
 
 # main
