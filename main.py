@@ -85,14 +85,6 @@ class MainForm(QDialog):
 
     def process_selections(self):
         _selected_items_df = self.data.loc[self.data['name'].isin(self.selections)]
-        # select cols that contain value 1
-        cols_with_1 = _selected_items_df.columns[_selected_items_df.eq(1).any()]
-        # select cols that contain value 2
-        cols_with_2 = _selected_items_df.columns[_selected_items_df.eq(2).any()]
-        # combine cols_with_1 and cols_with_2 for everything with a 1 or 2
-        # these are columns for wines that pair with everything
-        # (note: the list(set()) code converts the data to a list, and also assures there are no duplicate items
-        out = list(set(cols_with_2.append(cols_with_1)))
         # .sum() adds the values in each column
         # .sort_values(ascending=False) sorts the values (duh) and displays from highest to lowest
         display = _selected_items_df.sum(numeric_only=True).sort_values(ascending=False)
@@ -101,9 +93,9 @@ class MainForm(QDialog):
         top_pairing = display.index[0]  # so this is the first wine name on the list, the top pair
         print("The best matching wine category for this meal is " + top_pairing.upper())
         s = ''
-        the_list = wine_type_list.wine_types[top_pairing]
-        for item in the_list:
-            if the_list.index(item) < len(the_list) - 1:
+        examples_list = wine_type_list.wine_types[top_pairing]
+        for item in examples_list:
+            if examples_list.index(item) < len(examples_list) - 1:
                 s += item + ", "
             else:
                 s += "and " + item
@@ -111,6 +103,8 @@ class MainForm(QDialog):
         # without .to_string() the info is displayed with an added Type:int64 attribute at the end
         # see https://stackoverflow.com/questions/53025207/how-do-i-remove-name-and-dtype-from-pandas-output
         print(f"Here is the complete pairing list (higher numbers are better matches.\n{display.to_string()}\n\n")
+
+
 
 
 # main
