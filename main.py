@@ -1,7 +1,9 @@
 import sys
+
+from PyQt5.QtGui import QFont
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem, QProgressBar
 import pandas as pd
 import wine_type_list
 
@@ -31,6 +33,13 @@ class MainForm(QDialog):
         self.tableWidget.cellClicked.connect(self.cell_click)
         self.btnNext.clicked.connect(self.button_click)
 
+    def resize_cols(self):
+        for i in range(self.tableWidget.columnCount()):
+            self.tableWidget.resizeColumnToContents(i)
+        # self.tableWidget.resizeColumnToContents(0)
+        # self.tableWidget.resizeColumnToContents(1)
+        # self.tableWidget.resizeColumnToContents(2)
+
     def fill_table(self, category):
         # The choices for a given category, e.g., for category 'preparation' there's grilled, poached, etc.
         _choices = self.data.loc[self.data['category'] == category]
@@ -55,23 +64,44 @@ class MainForm(QDialog):
             else:
                 self.tableWidget.setItem(i, 2, QTableWidgetItem(''))
 
-        self.tableWidget.resizeColumnToContents(0)
-        self.tableWidget.resizeColumnToContents(1)
-        self.tableWidget.resizeColumnToContents(2)
+        self.resize_cols()
 
     def cell_click(self, row, col):
+        # user clicks on a column other than the one with checkbox
         if col != 0:
+            # determine whether the row's already got a checkmark, i.e., been selected by user
             _checkState = self.tableWidget.item(row, 0).checkState()
-            if _checkState == QtCore.Qt.Checked:
+            # gotta be careful with the order of the IF statements here!
+            # if the row's already been selected twice, got back to the initial unchecked/unbolded state
+            if _checkState == QtCore.Qt.Checked and self.tableWidget.item(row, 1).font().bold():
                 self.tableWidget.item(row, 0).setCheckState(QtCore.Qt.Unchecked)
-            else:
+                font = QFont()
+                font.setBold(False)
+                self.tableWidget.item(row, 1).setFont(font)
+                self.tableWidget.item(row, 2).setFont(font)
+            # if this is the first time the row's been checked, add a checkmark
+            elif _checkState == QtCore.Qt.Unchecked:
                 self.tableWidget.item(row, 0).setCheckState(QtCore.Qt.Checked)
+            # if it's already got a checkmark, make it bold
+            elif _checkState == QtCore.Qt.Checked:
+                font = QFont()
+                font.setBold(True)
+                self.tableWidget.item(row, 1).setFont(font)
+                self.tableWidget.item(row, 2).setFont(font)
+        self.resize_cols()
+
+
+
+
 
     def button_click(self):
         _selected_items = []
         # make a list with everything user selected in the displayed table
+        # if row is bolded, count that selection twice, i.e., weight the selection
         for row in range(self.tableWidget.rowCount()):
             if self.tableWidget.item(row, 0).checkState() == QtCore.Qt.Checked:
+                _selected_items.append(self.tableWidget.item(row, 1).text())
+            if self.tableWidget.item(row, 1).font().bold():
                 _selected_items.append(self.tableWidget.item(row, 1).text())
         # add user selections to the master list with all user selections
         self.selections.extend(_selected_items)
@@ -84,7 +114,12 @@ class MainForm(QDialog):
             self.process_selections()
 
     def process_selections(self):
-        _selected_items_df = self.data.loc[self.data['name'].isin(self.selections)]
+        _selected_items_df = pd.DataFrame()
+        for item in self.selections:
+            temp = self.data.loc[self.data['name'] == item]
+            _selected_items_df=pd.concat([_selected_items_df, temp])
+        print(_selected_items_df)
+        # _selected_items_df = self.data.loc[self.data['name'].isin(self.selections)]
         # .sum() adds the values in each column
         # .sort_values(ascending=False) sorts the values (duh) and displays from highest to lowest
         display = _selected_items_df.sum(numeric_only=True).sort_values(ascending=False)
@@ -103,6 +138,27 @@ class MainForm(QDialog):
         # without .to_string() the info is displayed with an added Type:int64 attribute at the end
         # see https://stackoverflow.com/questions/53025207/how-do-i-remove-name-and-dtype-from-pandas-output
         print(f"Here is the complete pairing list (higher numbers are better matches.\n{display.to_string()}\n\n")
+        # load sorted list of wines into table
+        self.tableWidget.clear()
+        self.tableWidget.setColumnCount(2)
+        # this provides a list of the wines themselves; they're the indexes on the dataframe called "display"
+        _wine_list = display.index.tolist()
+        # and this provides a list of the numbers, i.e., the sum of the values for each wine
+        _value_list = display.values
+        self.tableWidget.setRowCount(len(_wine_list))
+        for item in _wine_list:
+            i = _wine_list.index(item)
+            pbar = QProgressBar(self)
+            self.tableWidget.setItem(i, 0, QTableWidgetItem(_wine_list[i]))
+            match = int((_value_list[i]*100)/(len(_selected_items_df.index)*2))
+            pbar.setValue(match)
+            self.tableWidget.setCellWidget(i, 1, pbar)
+        self.resize_cols()
+
+
+
+
+
 
 
 
