@@ -90,70 +90,89 @@ class MainForm(QDialog):
                 self.tableWidget.item(row, 2).setFont(font)
         self.resize_cols()
 
-
-
-
-
     def button_click(self):
-        _selected_items = []
-        # make a list with everything user selected in the displayed table
-        # if row is bolded, count that selection twice, i.e., weight the selection
-        for row in range(self.tableWidget.rowCount()):
-            if self.tableWidget.item(row, 0).checkState() == QtCore.Qt.Checked:
-                _selected_items.append(self.tableWidget.item(row, 1).text())
-            if self.tableWidget.item(row, 1).font().bold():
-                _selected_items.append(self.tableWidget.item(row, 1).text())
-        # add user selections to the master list with all user selections
-        self.selections.extend(_selected_items)
-        # display the next table
-        self.category_index = self.category_index + 1
-        if self.category_index <= len(self.category) - 1:
-            self.fill_table(self.category[self.category_index])
-        # if the last table has already been displayed
+        # When you get to the 'Learn More' stage, when the program is displaying progress bars,
+        # iterating through the table throws an exception
+        # because empty or non-existent cell(s) will cause an exception when you check to see if they're bold()
+        if self.btnNext.text() != "Learn More":
+            _selected_items = []
+            # make a list with everything user selected in the displayed table
+            # if row is bolded, count that selection twice, i.e., weight the selection
+            for row in range(self.tableWidget.rowCount()):
+                if self.tableWidget.item(row, 0).checkState() == QtCore.Qt.Checked:
+                    _selected_items.append(self.tableWidget.item(row, 1).text())
+                if self.tableWidget.item(row, 1).font().bold():
+                    _selected_items.append(self.tableWidget.item(row, 1).text())
+            # add user selections to the master list with all user selections
+            self.selections.extend(_selected_items)
+            # display the next table
+            self.category_index = self.category_index + 1
+            if self.category_index <= len(self.category) - 1:
+                self.fill_table(self.category[self.category_index])
+            else:
+                self.process_selections()
+                self.btnNext.setText("Learn More")
         else:
             self.process_selections()
 
     def process_selections(self):
         _selected_items_df = pd.DataFrame()
+        # have to go through selections one at a time so that weighted categories will be counted twice
         for item in self.selections:
             temp = self.data.loc[self.data['name'] == item]
             _selected_items_df=pd.concat([_selected_items_df, temp])
-        print(_selected_items_df)
         # _selected_items_df = self.data.loc[self.data['name'].isin(self.selections)]
         # .sum() adds the values in each column
         # .sort_values(ascending=False) sorts the values (duh) and displays from highest to lowest
         display = _selected_items_df.sum(numeric_only=True).sort_values(ascending=False)
+        if self.btnNext.text() == "Exit":
+            app.exit()
+        # if we're about to display results, with progress bars:
+        elif self.btnNext.text() != "Learn More":
+            # load sorted list of wines into table
+            self.tableWidget.clear()
+            self.tableWidget.setColumnCount(2)
+            # this provides a list of the wines themselves; they're the indexes on the dataframe called "display"
+            _wine_list = display.index.tolist()
+            # and this provides a list of the numbers, i.e., the sum of the values for each wine
+            _value_list = display.values
+            self.tableWidget.setRowCount(len(_wine_list))
+            for item in _wine_list:
+                i = _wine_list.index(item)
+                pbar = QProgressBar(self)
+                self.tableWidget.setItem(i, 0, QTableWidgetItem(_wine_list[i]))
+                match = int((_value_list[i] * 100) / (len(_selected_items_df.index) * 2))
+                pbar.setValue(match)
+                self.tableWidget.setCellWidget(i, 1, pbar)
+            self.resize_cols()
+        # else if we've already displayed results, with progress bars:
+        elif self.btnNext.text() == "Learn More":
+            self.tableWidget.clear()
+            self.tableWidget.setColumnCount(1)
+            # display.index is a list of all the series' indexes, i.e., in this case, names of the wine categories
+            top_pairing = display.index[0]  # so this is the first wine name on the list, the top pair
+            s = "The best matching wine category for this meal is " + top_pairing.upper()
+            self.tableWidget.setItem(0, 0, QTableWidgetItem(s))
+            self.tableWidget.setItem(1, 0, QTableWidgetItem("Examples include:"))
+            # print("The best matching wine category for this meal is " + top_pairing.upper())
+            # s = ''
+            examples_list = wine_type_list.wine_types[top_pairing]
+            for item in examples_list:
+                self.tableWidget.setItem(examples_list.index(item)+2, 0, QTableWidgetItem(item))
+                # if examples_list.index(item) < len(examples_list) - 1:
+                #     s += item + ", "
+                # else:
+                #     s += "and " + item
+            self.resize_cols()
+            # print("Examples include " + s)
+            # without .to_string() the info is displayed with an added Type:int64 attribute at the end
+            # see https://stackoverflow.com/questions/53025207/how-do-i-remove-name-and-dtype-from-pandas-output
+            # print(f"Here is the complete pairing list (higher numbers are better matches.\n{display.to_string()}\n\n")
+            self.btnNext.setText("Exit")
 
-        # display.index is a list of all the series' indexes, i.e., in this case, names of the wine categories
-        top_pairing = display.index[0]  # so this is the first wine name on the list, the top pair
-        print("The best matching wine category for this meal is " + top_pairing.upper())
-        s = ''
-        examples_list = wine_type_list.wine_types[top_pairing]
-        for item in examples_list:
-            if examples_list.index(item) < len(examples_list) - 1:
-                s += item + ", "
-            else:
-                s += "and " + item
-        print("Examples include " + s)
-        # without .to_string() the info is displayed with an added Type:int64 attribute at the end
-        # see https://stackoverflow.com/questions/53025207/how-do-i-remove-name-and-dtype-from-pandas-output
-        print(f"Here is the complete pairing list (higher numbers are better matches.\n{display.to_string()}\n\n")
-        # load sorted list of wines into table
-        self.tableWidget.clear()
-        self.tableWidget.setColumnCount(2)
-        # this provides a list of the wines themselves; they're the indexes on the dataframe called "display"
-        _wine_list = display.index.tolist()
-        # and this provides a list of the numbers, i.e., the sum of the values for each wine
-        _value_list = display.values
-        self.tableWidget.setRowCount(len(_wine_list))
-        for item in _wine_list:
-            i = _wine_list.index(item)
-            pbar = QProgressBar(self)
-            self.tableWidget.setItem(i, 0, QTableWidgetItem(_wine_list[i]))
-            match = int((_value_list[i]*100)/(len(_selected_items_df.index)*2))
-            pbar.setValue(match)
-            self.tableWidget.setCellWidget(i, 1, pbar)
-        self.resize_cols()
+
+
+
 
 
 
