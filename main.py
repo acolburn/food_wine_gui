@@ -3,28 +3,23 @@ import sys
 from PyQt5.QtGui import QFont
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem, QProgressBar
+from PyQt5.QtWidgets import QDialog, QApplication, QTableWidgetItem, QProgressBar
 import pandas as pd
 import wine_type_list
 
 
 class MainForm(QDialog):
-    # initialize empty DataFrame
-    # selected_data = pd.DataFrame()
-    # making data frame from csv file
-    data = pd.read_csv("food_wine_pairing.csv", encoding='unicode_escape')
-    # these are the broad categories making up each table in the UI
-    category = ["meat", "preparation", "dairy", "vegetable", "seasoning", "starch", "sweets"]
-    # we're going to loop through the categories list one category at a time, starting at index 0
-    category_index = 0
-    # a list to keep track of everything user selects over multiple screens
-    selections = []
-
     def __init__(self):
         # initialize empty DataFrame
         # self.selected_data = pd.DataFrame()
         # making data frame from csv file
-        # self.data = pd.read_csv("food_wine_pairing.csv", encoding='unicode_escape')
+        self.data = pd.read_csv("food_wine_pairing.csv", encoding='unicode_escape')
+        # these are the broad categories making up each table in the UI
+        self.category = ["meat", "preparation", "dairy", "vegetable", "seasoning", "starch", "sweets"]
+        # we're going to loop through the categories list one category at a time, starting at index 0
+        self.category_index = 0
+        # a list to keep track of everything user selects over multiple screens
+        self.selections = []
 
         super(MainForm, self).__init__()
         loadUi("main_form.ui", self)
@@ -120,7 +115,7 @@ class MainForm(QDialog):
         # have to go through selections one at a time so that weighted categories will be counted twice
         for item in self.selections:
             temp = self.data.loc[self.data['name'] == item]
-            _selected_items_df=pd.concat([_selected_items_df, temp])
+            _selected_items_df = pd.concat([_selected_items_df, temp])
         # _selected_items_df = self.data.loc[self.data['name'].isin(self.selections)]
         # .sum() adds the values in each column
         # .sort_values(ascending=False) sorts the values (duh) and displays from highest to lowest
@@ -158,7 +153,7 @@ class MainForm(QDialog):
             # s = ''
             examples_list = wine_type_list.wine_types[top_pairing]
             for item in examples_list:
-                self.tableWidget.setItem(examples_list.index(item)+2, 0, QTableWidgetItem(item))
+                self.tableWidget.setItem(examples_list.index(item) + 2, 0, QTableWidgetItem(item))
                 # if examples_list.index(item) < len(examples_list) - 1:
                 #     s += item + ", "
                 # else:
@@ -169,17 +164,6 @@ class MainForm(QDialog):
             # see https://stackoverflow.com/questions/53025207/how-do-i-remove-name-and-dtype-from-pandas-output
             # print(f"Here is the complete pairing list (higher numbers are better matches.\n{display.to_string()}\n\n")
             self.btnNext.setText("Exit")
-
-
-
-
-
-
-
-
-
-
-
 
 
 # main
