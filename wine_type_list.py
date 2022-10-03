@@ -6,6 +6,6 @@ wine_types = {
 "rich white" : ["chardonnay", "semillon", "viognier", "marsanne", "roussane"],
 "light white" : ["sauvignon blanc", "albarino", "pinot blanc", "vermentino", "gergenega", "treggiano", "pinot grigio"],
 "sparkling" : ["champagne", "prosecco", "cremant", "cava", "sparkling wine", "sparkling rose"],
-"sweet white" : ["moscato", "riesling", "chenin blanc", "gewurztraminer", "late harvest whites"],
+"sweet wine" : ["moscato", "riesling", "chenin blanc", "gewurztraminer", "late harvest whites"],
 "dessert" : ["port", "sherry", "madeira", "vin santo", "muscat"]
 }
