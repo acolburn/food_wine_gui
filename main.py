@@ -31,9 +31,6 @@ class MainForm(QDialog):
     def resize_cols(self):
         for i in range(self.tableWidget.columnCount()):
             self.tableWidget.resizeColumnToContents(i)
-        # self.tableWidget.resizeColumnToContents(0)
-        # self.tableWidget.resizeColumnToContents(1)
-        # self.tableWidget.resizeColumnToContents(2)
 
     def fill_table(self, category):
         # The choices for a given category, e.g., for category 'preparation' there's grilled, poached, etc.
@@ -67,7 +64,8 @@ class MainForm(QDialog):
             # determine whether the row's already got a checkmark, i.e., been selected by user
             _checkState = self.tableWidget.item(row, 0).checkState()
             # gotta be careful with the order of the IF statements here!
-            # if the row's already been selected twice, got back to the initial unchecked/unbolded state
+            # if the row's already been selected twice, go back to the initial
+            # unchecked/unbolded state
             if _checkState == QtCore.Qt.Checked and self.tableWidget.item(row, 1).font().bold():
                 self.tableWidget.item(row, 0).setCheckState(QtCore.Qt.Unchecked)
                 font = QFont()
